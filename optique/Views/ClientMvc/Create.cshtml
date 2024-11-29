@@ -1,0 +1,138 @@
+@model optique.Dtos.ClientDTO
+
+<div class="breadcrumb">
+    <a href="@Url.Action("Index", "Acceuil")" class="breadcrumb-link">Accueil</a> &gt;
+    <span class="breadcrumb-current">Clients</span> &gt;
+    <span class="breadcrumb-current">Ajouter un Client</span>
+</div>
+
+<div class="client-create-container">
+    <h2 class="form-title">Créer un Nouveau Client</h2>
+
+    <form asp-action="Create" asp-controller="ClientMvc" method="post" class="modern-form">
+        @Html.AntiForgeryToken()
+
+        <!-- Nom du Client -->
+        <div class="form-group">
+            <label asp-for="NomClient" class="form-label"></label>
+            <input asp-for="NomClient" class="form-control modern-input" />
+            <span asp-validation-for="NomClient" class="text-danger"></span>
+        </div>
+
+        <!-- Adresse -->
+        <div class="form-group">
+            <label asp-for="Adresse" class="form-label"></label>
+            <input asp-for="Adresse" class="form-control modern-input" />
+            <span asp-validation-for="Adresse" class="text-danger"></span>
+        </div>
+
+        <!-- Téléphone -->
+        <div class="form-group">
+            <label asp-for="Telephone" class="form-label"></label>
+            <input asp-for="Telephone" class="form-control modern-input" />
+            <span asp-validation-for="Telephone" class="text-danger"></span>
+        </div>
+
+        <!-- Type de Client -->
+        <div class="form-group">
+            <label asp-for="TypeClientId" class="form-label">Type de Client</label>
+            <select asp-for="TypeClientId" class="form-control modern-select">
+                <option value="">Sélectionner un type de client</option>
+                @if (ViewBag.TypesClient != null)
+                {
+                    foreach (var typeClient in ViewBag.TypesClient)
+                    {
+                        <option value="@typeClient.Id">@typeClient.Libelle</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="TypeClientId" class="text-danger"></span>
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary modern-button">Créer</button>
+            <button type="button" class="btn btn-secondary modern-button">Annuler</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<!-- Add the following CSS for a modern look -->
+<style>
+    .client-create-container {
+        background-color: #f7f8fa;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+        margin: 20px auto;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .modern-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        display: block;
+        color: #5a5a5a;
+    }
+
+    .modern-input, .modern-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .modern-input:focus, .modern-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+    }
+
+    .form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espace entre les boutons */
+}
+
+    .modern-button {
+        width: 200px;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+
+    .modern-button:hover {
+        background-color: #0056b3;
+        cursor: pointer;
+    }
+
+    .text-danger {
+        color: #dc3545;
+    }
+</style>

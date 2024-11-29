@@ -1,0 +1,117 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/Capture d’écran 2024-09-24 à 10.34.22.png",
+      "PackagePath": "staticwebassets/images/Capture d’écran 2024-09-24 à 10.34.22.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/acquisition.png",
+      "PackagePath": "staticwebassets/images/acquisition.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/action.png",
+      "PackagePath": "staticwebassets/images/action.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/arrivage.png",
+      "PackagePath": "staticwebassets/images/arrivage.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/base-de-donnees.png",
+      "PackagePath": "staticwebassets/images/base-de-donnees.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/calendrier.png",
+      "PackagePath": "staticwebassets/images/calendrier.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/client.png",
+      "PackagePath": "staticwebassets/images/client.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/colis-livre.png",
+      "PackagePath": "staticwebassets/images/colis-livre.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/distribution.png",
+      "PackagePath": "staticwebassets/images/distribution.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/entrepot.png",
+      "PackagePath": "staticwebassets/images/entrepot.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/gestion-de-linventaire.png",
+      "PackagePath": "staticwebassets/images/gestion-de-linventaire.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/livraison-gratuite.png",
+      "PackagePath": "staticwebassets/images/livraison-gratuite.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/marche.png",
+      "PackagePath": "staticwebassets/images/marche.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/nouveau-paiement.png",
+      "PackagePath": "staticwebassets/images/nouveau-paiement.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/ordre.png",
+      "PackagePath": "staticwebassets/images/ordre.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/product-svgrepo-com.svg",
+      "PackagePath": "staticwebassets/images/product-svgrepo-com.svg"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/produit.png",
+      "PackagePath": "staticwebassets/images/produit.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/retour.png",
+      "PackagePath": "staticwebassets/images/retour.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/societe.png",
+      "PackagePath": "staticwebassets/images/societe.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/stock-svgrepo-com.svg",
+      "PackagePath": "staticwebassets/images/stock-svgrepo-com.svg"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/stock-svgrepo1-com.svg",
+      "PackagePath": "staticwebassets/images/stock-svgrepo1-com.svg"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/stock.png",
+      "PackagePath": "staticwebassets/images/stock.png"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/store-inventory-inventory-stock-supply-svgrepo-com.svg",
+      "PackagePath": "staticwebassets/images/store-inventory-inventory-stock-supply-svgrepo-com.svg"
+    },
+    {
+      "Id": "/Users/moha/Desktop/optique.net/optique/wwwroot/images/warehouse-stock-svgrepo-com.svg",
+      "PackagePath": "staticwebassets/images/warehouse-stock-svgrepo-com.svg"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.optique.props",
+      "PackagePath": "build\\optique.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.optique.props",
+      "PackagePath": "buildMultiTargeting\\optique.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.optique.props",
+      "PackagePath": "buildTransitive\\optique.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.optique.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

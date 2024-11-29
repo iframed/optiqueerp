@@ -1,0 +1,142 @@
+@model optique.Dtos.SocieteDTO
+@{
+    ViewData["Title"] = "Ajouter une Société";
+}
+
+<div class="breadcrumb">
+    <a href="@Url.Action("Index", "Acceuil")" class="breadcrumb-link">Accueil</a> &gt;
+    <span class="breadcrumb-current">Sociétés</span> &gt;
+    <span class="breadcrumb-current">Créer une Nouvelle Société</span>
+</div>
+
+<div class="societe-create-container">
+    <h2 class="form-title">Créer une Nouvelle Société</h2>
+
+    <form asp-action="Create" method="post" class="societe-form">
+        @Html.AntiForgeryToken()
+
+        <!-- Nom de la société avec bouton de recherche -->
+        <div class="form-group">
+            <label asp-for="NomSociete" class="form-label"></label>
+            <div class="input-container">
+                <input asp-for="NomSociete" class="form-input" placeholder="Entrez le nom de la société" />
+                <button class="search-button" type="button">
+                   
+                </button>
+            </div>
+            <span asp-validation-for="NomSociete" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- Adresse -->
+        <div class="form-group">
+            <label asp-for="Adresse" class="form-label"></label>
+            <input asp-for="Adresse" class="form-input" placeholder="Entrez l'adresse" />
+            <span asp-validation-for="Adresse" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- Numéro de téléphone -->
+        <div class="form-group">
+            <label asp-for="NumTelephone" class="form-label"></label>
+            <input asp-for="NumTelephone" class="form-input" placeholder="Entrez le numéro de téléphone" />
+            <span asp-validation-for="NumTelephone" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- Bouton de soumission -->
+        <button type="submit" class="btn-submit">Créer</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<style>
+    .societe-create-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .societe-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: bold;
+    }
+
+    .input-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+        border-color: #007bff;
+    }
+
+    .search-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        margin-left: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-button i {
+        font-size: 16px;
+    }
+
+    .btn-submit {
+        padding: 12px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        background-color: #0056b3;
+    }
+
+    .form-validation {
+        color: red;
+        font-size: 14px;
+    }
+</style>

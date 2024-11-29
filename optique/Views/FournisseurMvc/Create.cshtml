@@ -1,0 +1,153 @@
+@model optique.Dtos.FournisseurDTO
+@{
+    ViewData["Title"] = "Ajouter un Fournisseur";
+}
+
+<div class="breadcrumb">
+        <a href="@Url.Action("Index", "Acceuil")" class="breadcrumb-link">Accueil</a> &gt;
+        <span class="breadcrumb-current">Arrivages</span> &gt;
+        <span class="breadcrumb-current">Détail d'Arrivage</span>
+    </div>
+<div class="fournisseur-create-container">
+    <h2 class="form-title">Créer un Nouveau Fournisseur</h2>
+
+    <form asp-action="Create" method="post" class="fournisseur-form">
+        @Html.AntiForgeryToken()
+
+        <!-- Nom du fournisseur -->
+        <div class="form-group">
+            <label asp-for="NomFournisseur" class="form-label"></label>
+            <input asp-for="NomFournisseur" class="form-input" placeholder="Entrez le nom du fournisseur" />
+            <span asp-validation-for="NomFournisseur" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- Adresse -->
+        <div class="form-group">
+            <label asp-for="Adresse" class="form-label"></label>
+            <input asp-for="Adresse" class="form-input" placeholder="Entrez l'adresse du fournisseur" />
+            <span asp-validation-for="Adresse" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- Téléphone -->
+        <div class="form-group">
+            <label asp-for="Telephone" class="form-label"></label>
+            <input asp-for="Telephone" class="form-input" placeholder="Entrez le numéro de téléphone" />
+            <span asp-validation-for="Telephone" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- ICE -->
+        <div class="form-group">
+            <label asp-for="ICE" class="form-label"></label>
+            <input asp-for="ICE" class="form-input" placeholder="Entrez le numéro ICE" />
+            <span asp-validation-for="ICE" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- Pays -->
+        <div class="form-group">
+            <label asp-for="Pays" class="form-label"></label>
+            <input asp-for="Pays" class="form-input" placeholder="Entrez le pays" />
+            <span asp-validation-for="Pays" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- DeviseLibelle (Dropdown) -->
+        <div class="form-group">
+    <label asp-for="DeviseLibelle" class="form-label"></label>
+    <select asp-for="DeviseLibelle" class="form-input">
+        <option value="">Sélectionnez une devise</option>
+        @if (ViewBag.Devises != null)
+        {
+            @foreach (var devise in ViewBag.Devises)
+            {
+                <option value="@devise.Libelle">@devise.Libelle</option>
+            }
+        }
+    </select>
+    <span asp-validation-for="DeviseLibelle" class="form-validation text-danger"></span>
+</div>
+
+
+        <!-- DeviseCode -->
+        <div class="form-group">
+            <label asp-for="DeviseCode" class="form-label"></label>
+            <input asp-for="DeviseCode" class="form-input" placeholder="Entrez le code de la devise" />
+            <span asp-validation-for="DeviseCode" class="form-validation text-danger"></span>
+        </div>
+
+        <!-- Bouton de soumission -->
+        <button type="submit" class="btn-submit">Créer</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+<style>
+    .fournisseur-create-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .fournisseur-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: bold;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+        border-color: #007bff;
+    }
+
+    .btn-submit {
+        padding: 12px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        background-color: #0056b3;
+    }
+
+    .form-validation {
+        color: red;
+        font-size: 14px;
+    }
+</style>

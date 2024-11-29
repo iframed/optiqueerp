@@ -1,0 +1,438 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+@{
+    ViewData["Title"] = "Accueil";
+     var username = User.Identity.Name;
+}
+
+
+
+
+<div class="container" style="width: 100%; ">
+
+  <div class="full-width-header" >
+        <div class="d-flex justify-content-between align-items-center p-3">
+            <div class="navbar-brand">Bonjour, @username</div>
+            <form asp-controller="Auth" asp-action="Logout" method="post">
+                <button type="submit" class="btn btn-danger" style="margin-right: 15px;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Menu Section -->
+     <div class="menu-container" >
+        <div class="menu-section">
+            <a href="@Url.Action("Index", "BaseDeDonnees")" class="menu-link">
+                <div class="menu-item">
+                    <img src="@Url.Content("~/images/base-de-donnees.png")" alt="Base de données" />
+                    <span>Base de données</span>
+                </div>
+            </a>
+            <a href="@Url.Action("Index", "ArrivageMvc", new { arrivageId = 1 })" class="menu-link"> <!-- Remplacez '1' par l'ID de l'arrivage réel -->
+                <div class="menu-item">
+                    <img src="@Url.Content("~/images/colis-livre.png")"  alt="Ajouter Détails" />
+                    <span>Arrivage</span>
+                </div>
+            </a>
+            <a href="@Url.Action("Index", "ArrivageDetailsMvc")" class="menu-link">
+                <div class="menu-item">
+                    <img src="@Url.Content("~/images/gestion-de-linventaire.png")" alt="Arrivages" />
+                    <span>Arrivages Details</span>
+                </div>
+            </a>
+            <a href="@Url.Action("Index", "RetourFournisseurMvc")" class="menu-link">
+                <div class="menu-item">
+                    <img src="@Url.Content("~/images/retour.png")" alt="Retours" />
+                    <span>Retours</span>
+                </div>
+            </a>
+            <a href="@Url.Action("Index", "DistributionMvc")" class="menu-link">
+                <div class="menu-item">
+                    <img src="@Url.Content("~/images/distribution.png")" alt="Distributions" />
+                    <span>Distributions</span>
+                </div>
+            </a>
+            <a href="@Url.Action("Index", "VenteMvc")" class="menu-link">
+                <div class="menu-item">
+                    <img src="@Url.Content("~/images/acquisition.png")" alt="Vente" />
+                    <span>Vente</span>
+                </div>
+            </a>
+            <a href="@Url.Action("StockIndex", "Stock")" class="menu-link">
+             <div class="menu-item">
+                    <img src="@Url.Content("~/images/stock.png")" alt="Vente" />
+                    <span>Stock</span>
+                </div>
+            </a>
+            <a href="@Url.Action("Calendar", "VenteMvc")" class="menu-link">
+             <div class="menu-item">
+                    <img src="@Url.Content("~/images/calendrier.png")" alt="Vente" />
+                    <span>Inventaire</span>
+                </div>
+</a>
+            
+
+
+        </div>
+    </div>
+    <!-- Statistiques Section -->
+    <div class="stats-section">
+        <h2>Statistiques</h2>
+
+        <!-- Operations and Articles Sections -->
+        <div class="stats-container">
+            <!-- Opérations Section -->
+            <div class="operations-section">
+                <h3 style="text-align: center;">Opérations</h3>
+                <div class="operations-cards">
+                    <div class="operation-card">
+                        <img src="@Url.Content("~/images/colis-livre.png")" alt="Arrivages Icon" class="card-icon" />
+                        <span class="operation-title">Arrivages</span>
+                        <span class="operation-value">@Model.NombreArrivages</span>
+                    </div>
+                    <div class="operation-card">
+                        <img src="@Url.Content("~/images/retour.png")" alt="Retours Icon" class="card-icon" />
+                        <span class="operation-title">Retours</span>
+                        <span class="operation-value">@Model.NombreRetours</span>
+                    </div>
+                    <div class="operation-card">
+                        <img src="@Url.Content("~/images/distribution.png")" alt="Distributions Icon" class="card-icon" />
+                        <span class="operation-title">Distributions</span>
+                        <span class="operation-value">@Model.NombreDistributions</span>
+                    </div>
+                    <div class="operation-card">
+                        <img src="@Url.Content("~/images/acquisition.png")" alt="Ventes Icon" class="card-icon" />
+                         <span class="operation-title">Ventes</span>
+                        <span class="operation-value">@Model.NombreVentes</span>
+                    </div>
+                </div>
+
+                <!-- Articles Section -->
+                <h3 style="text-align: center;">Articles</h3>
+                <div class="articles-cards">
+                    <div class="article-card">
+                       
+                        <span class="article-title">Reçus</span>
+                        <span class="article-value">@Model.NombreArticlesRecus</span>
+                    </div>
+                    <div class="article-card">
+                        
+                        <span class="article-title">Retournés</span>
+                        <span class="article-value">@Model.NombreArticlesRetournes</span>
+                    </div>
+                    <div class="article-card">
+                        
+                        <span class="article-title">Distribués</span>
+                        <span class="article-value">@Model.NombreArticlesDistribues</span>
+                    </div>
+                    <div class="article-card">
+                   
+                        
+                            <img src="@Url.Content("~/images/acquisition.png")" alt="Vente" style="width: 25px; height: 25px;" />
+                        
+                        
+                        
+                        <span class="article-title">Vendus</span>
+                        <span class="article-value">@Model.NombreArticlesVendus</span>
+                      
+                        
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diagramme circulaire -->
+            <div class="chart-section">
+                <h3 style="text-align: center;">Opérations</h3>
+                <canvas id="operationsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+body {
+    background-color: #f8f9fa; /* Couleur de fond de la page */
+    margin: 0;
+    padding: 0;
+}
+
+.menu-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    margin: 150px auto 0;
+}
+
+.menu-section {
+    display: flex;
+    gap: 20px;
+    width: fit-content;
+}
+
+.menu-item {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.menu-link {
+    text-decoration: none;
+}
+
+.menu-link span {
+    color: #000;
+    font-weight: normal;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.menu-link img {
+    max-width: 100%;
+    max-height: 70px;
+    margin-bottom: 10px;
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.stats-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch; /* Aligne les hauteurs des enfants */
+}
+
+/* Suppression des marges si nécessaire pour alignement parfait */
+.operations-section, .chart-section {
+    flex: 1 1 48%;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 10px 10px 0; /* Ajuster la marge pour l'espacement */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ajoute de l'espace entre les éléments internes */
+}
+
+
+.operations-cards, .articles-cards {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.operation-card, .article-card {
+    width: calc(25% - 20px);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.operation-card:hover, .article-card:hover {
+    transform: scale(1.05);
+}
+
+.operation-card:nth-child(1), .article-card:nth-child(1) {
+    background-color: #fff4cc;
+}
+
+.operation-card:nth-child(2), .article-card:nth-child(2) {
+    background-color: #ffe6e6;
+}
+
+.operation-card:nth-child(3), .article-card:nth-child(3) {
+    background-color: #e3f7e3;
+}
+
+.operation-card:nth-child(4), .article-card:nth-child(4) {
+    background-color: #fce4d6;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+}
+
+.operation-title, .article-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.operation-value, .article-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+}
+
+.chart-section canvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    max-height: 300px;
+}
+
+.full-width-header {
+    width: 100%; /* Assurez-vous que l'élément prend toute la largeur de la page */
+    background-color: #add8e6; /* Bleu clair */
+    color: #fff; /* Texte en blanc */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ajout d'une légère ombre */
+}
+
+.navbar-brand {
+    color: #000; /* Couleur du texte de bienvenue */
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.btn-danger {
+    
+    background-color: white;
+    color: black;
+    font-size: 1rem;
+}
+
+.btn-danger:hover {
+    background-color: gray;
+    cursor: pointer;
+    
+}
+
+.d-flex {
+    display: flex; /* Utilisation de Flexbox */
+    justify-content: space-between; /* Sépare les éléments (bienvenue à gauche, bouton à droite) */
+    align-items: center; /* Centre les éléments verticalement */
+    width: 100%; /* Prend toute la largeur disponible */
+}
+
+.p-3 {
+    padding: 1rem; /* Ajoute du padding autour des éléments */
+}
+</style>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('operationsChart').getContext('2d');
+        var operationsChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Arrivages', 'Retours', 'Distributions', 'Ventes'],
+                datasets: [{
+                    data: [
+                        @Model.NombreArrivages, 
+                        @Model.NombreRetours, 
+                        @Model.NombreDistributions, 
+                        @Model.NombreVentes
+                    ],
+                    backgroundColor: ['#fff4cc', '#ffe6e6', '#e3f7e3', '#fce4d6'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        bottom: 50  // Ajuste le padding pour laisser plus d'espace pour la légende
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',  // Met la légende en bas
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            boxWidth: 20,
+                            generateLabels: function(chart) {
+                                var data = chart.data;
+                                return data.labels.map(function(label, index) {
+                                    return {
+                                        text: label + ': ' + data.datasets[0].data[index],
+                                        fillStyle: data.datasets[0].backgroundColor[index],
+                                        strokeStyle: data.datasets[0].borderColor[index],
+                                        lineWidth: 1,
+                                        hidden: false
+                                    };
+                                });
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: '#333',
+                        titleColor: '#fff',
+                        bodyColor: '#fff'
+                    },
+                   /* datalabels: {
+                        color: '#000',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        anchor: 'center',  // Change 'end' to 'center' to position it more towards the center
+                        align: 'center',   // Align to the center of the arc
+                        offset: 40,  // Increase offset to move labels away from the center
+                        formatter: (value, ctx) => {
+                            return ctx.chart.data.labels[ctx.dataIndex] + ": " + value;
+                        }
+                    }*/
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    });
+</script>
+
+
+

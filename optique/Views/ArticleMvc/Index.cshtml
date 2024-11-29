@@ -1,0 +1,311 @@
+@model optique.ViewModels.ArticleViewModel
+
+@{
+    ViewData["Title"] = "Articles";
+}
+
+<div class="article-container">
+    <div class="header">
+        <div class="breadcrumb">
+            <a href="@Url.Action("Index", "Acceuil")">Accueil</a> &gt; <span>Articles</span>
+        </div>
+        <a asp-controller="ArticleMvc" asp-action="Create" class="btn btn-primary">+ Nouvel Article</a>
+    </div>
+
+    <!-- Formulaire de filtres -->
+    <form asp-action="Filter" method="get" class="filters">
+        <div class="custom-select-container">
+            <select asp-for="SelectedFournisseur" asp-items="Model.FournisseurList">
+                <option value="">Fournisseur</option>
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <div class="custom-select-container">
+            <select asp-for="SelectedType" asp-items="Model.TypeList">
+                <option value="">Type</option>
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <div class="custom-select-container">
+            <select asp-for="SelectedMarque" asp-items="Model.MarqueList">
+                <option value="">Marque</option>
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input asp-for="SearchReference" type="text" placeholder="Recherche par référence" />
+            <button class="search-button" type="submit"></button>
+        </div>
+
+        <a class="reset-button" href="@Url.Action("Index", "ArticleMvc")">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#004080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 10 10M12 2v4M12 2l3-3M12 2l-3-3"></path>
+            </svg>
+        </a>
+    </form>
+
+    <!-- Tableau des articles -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Article Id</th>
+                    <th>Description</th>
+                    <th>Marque</th>
+                    <th>Type</th>
+                    <th>Couleur</th>
+                    <th>Fournisseur</th>
+                    <th>Référence</th>
+                    <th>Prix Vente Inter</th>
+                    <th>Prix Vente Revendeur</th>
+                    <th>Prix Vente Client Final</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var article in Model.Articles)
+                {
+                    <tr>
+                        <td>@article.Id</td>
+                        <td>@article.Description</td>
+                        <td>@article.MarqueLibelle</td>
+                        <td>@article.TypeLibelle</td>
+                        <td>@article.Couleur</td>
+                        <td>@article.FournisseurNom</td>
+                        <td>@article.Reference</td>
+                        <td>@article.PrixDeVenteInter.ToString("C")</td>
+                        <td>@article.PrixDeVenteRevendeur.ToString("C")</td>
+                        <td>@article.PrixDeVenteClientFinal.ToString("C")</td>
+                        <td>
+                           
+                            <a href="@Url.Action("Delete", "ArticleMvc", new { id = article.Id })" class="btn btn-sm btn-danger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 6h18"></path>
+  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+  <path d="M10 11v6"></path>
+  <path d="M14 11v6"></path>
+</svg>
+</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Styles adaptés de l'interface d'arrivage -->
+<style>
+    .article-container {
+        width: 100%;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .breadcrumb {
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        align-items: center;
+    }
+
+    .breadcrumb a {
+        color: #004080;
+        text-decoration: none;
+        margin-right: 5px;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb span {
+        color: #666;
+    }
+
+    .filters {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custom-select-container {
+        position: relative;
+        display: inline-block;
+        width: 200px;
+    }
+
+    .custom-select-container select {
+        width: 100%;
+        padding: 10px;
+        padding-right: 40px;
+        border: 1px solid #004080;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #333;
+        font-weight: 400;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .select-arrow {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 100%;
+        background-color: #004080;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .triangle {
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid #fff;
+    }
+
+    .input-container {
+        position: relative;
+        width: 250px;
+    }
+
+    .input-container input[type="text"] {
+        width: 100%;
+        padding: 10px 35px 10px 10px;
+        border: 1px solid #004080;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333;
+        box-sizing: border-box;
+    }
+
+    .input-container input[type="text"]::placeholder {
+        color: #666;
+    }
+
+    .search-button {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: #004080;
+        font-size: 16px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-button::before {
+        content: '\1F50D';
+        font-size: 16px;
+        color: #004080;
+    }
+
+    .reset-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reset-button svg {
+        width: 24px;
+        height: 24px;
+        stroke: #004080;
+    }
+
+    .table-container {
+        max-height: 100vh;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+    thead th {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    tbody tr {
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    tbody td {
+        padding: 15px;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 14px;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tbody td:first-child {
+        border-left: 1px solid #ddd;
+        border-radius: 8px 0 0 8px;
+    }
+
+    tbody td:last-child {
+        border-right: 1px solid #ddd;
+        border-radius: 0 8px 8px 0;
+    }
+
+    tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+    }
+</style>

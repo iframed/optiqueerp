@@ -1,0 +1,561 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+     var totalDetailsArrivage = Model.ArrivageDetails.Sum(d => d.PrixDachatDevise * d.QuantiteRecuParArticle);
+    var montantRestant = Model.MontantFacture - totalDetailsArrivage;
+}
+
+@model optique.ViewModels.ArrivageDetailsFullViewModel
+<div class="header" style="margin-bottom: 40px;">
+        <div class="breadcrumb">
+            <a href="@Url.Action("Index", "Acceuil")">Accueil</a> &gt;
+            <a href="@Url.Action("Index", "ArrivageMvc")">Arrivage</a> &gt;
+            <span>Nouveau Arrivage</span>
+        </div>
+
+    <form asp-action="Importer" method="post" enctype="multipart/form-data" id="excelForm">
+    <input type="hidden" name="arrivageId" value="@Model.ArrivageId" />
+    
+    <!-- Caché mais toujours fonctionnel -->
+    <input type="file" name="file" class="form-control" id="fileInput" style="display: none;" />
+
+    <!-- Icône qui remplace le bouton -->
+    <button type="button" class="btn" id="iconButton" style="background-color: transparent; border: none;">
+        <i class="fas fa-file-excel" style="color: green; font-size: 4em; cursor: pointer;"></i>
+    </button>
+</form>    
+
+</div>
+
+
+
+<div class="row" style="height:500px;">
+    <!-- Formulaire à gauche -->
+    
+       
+
+
+
+
+    
+    <div class="col-md-8" style="padding-left: 20px;" >
+
+       
+        
+        
+
+        
+
+        <!-- Formulaire principal pour ajouter un détail d'arrivage -->
+        <form asp-action="Create" method="post" class="arrivage-details-form" id="arrivageForm">
+            @Html.HiddenFor(model => model.ArrivageId)
+            @Html.HiddenFor(model => model.DateArrivage)
+            @Html.HiddenFor(model => model.NumBL)
+            @Html.HiddenFor(model => model.NumFacture)
+            @Html.HiddenFor(model => model.MontantFacture)
+            @Html.HiddenFor(model => model.SocieteId)
+            @Html.HiddenFor(model => model.FournisseurId)
+            
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+    <label asp-for="ArticleId">Article</label>
+    <div class="input-group">
+        <select asp-for="ArticleId" asp-items="Model.ArticlesList" class="form-control" id="articleSelect" required ></select>
+        <div class="input-group-append">
+            <a href="@Url.Action("Create", "ArticleMvc")" class="btn-round">+</a> <!-- Bouton "+" -->
+        </div>
+    </div>
+    <span asp-validation-for="ArticleId" class="text-danger"></span>
+</div>
+
+
+                <div class="form-group col-md-6">
+                    <label asp-for="Marque">Marque</label>
+                    <input asp-for="Marque" class="form-control no-border" id="marqueInput" readonly />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="NumSerie">N° de série</label>
+                    <input asp-for="NumSerie" class="form-control" required />
+                    <span asp-validation-for="NumSerie" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="QuantiteRecuParArticle">Quantité reçue</label>
+                    <input asp-for="QuantiteRecuParArticle" class="form-control" required />
+                    <span asp-validation-for="QuantiteRecuParArticle" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="TauxRemise">Taux de remise</label>
+                    <input asp-for="TauxRemise" class="form-control" />
+                    <span asp-validation-for="TauxRemise" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="PrixDachatDevise">Prix d'achat (Devise)</label>
+                    <input asp-for="PrixDachatDevise" class="form-control" />
+                    <span asp-validation-for="PrixDachatDevise" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="PrixAchatNetDevise">Prix d'achat net (Devise)</label>
+                    <input asp-for="PrixAchatNetDevise" class="form-control" />
+                    <span asp-validation-for="PrixAchatNetDevise" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="PrixDachatMAD">Prix d'achat (MAD)</label>
+                    <input asp-for="PrixDachatMAD" class="form-control" required />
+                    <span asp-validation-for="PrixDachatMAD" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="PrixAchatNetMAD">Prix d'achat net (MAD)</label>
+                    <input asp-for="PrixAchatNetMAD" class="form-control" required/>
+                    <span asp-validation-for="PrixAchatNetMAD" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Actions du formulaire -->
+            <div class="form-actions" style="display: flex; justify-content: space-between;">
+                <button type="submit" class="btn btn-primary" style="margin-left: 100px;">Suivant</button>
+
+                <form   style="display:inline;">
+                    <a href="@Url.Action("Index", "ArrivageDetailsMvc")" class="btn btn-secondary" role="button">Annuler</a>
+
+                </form>
+
+               @if (Model.ArrivageDetails.Sum(d => (decimal)(d.PrixDachatDevise * d.QuantiteRecuParArticle)) <= Model.MontantFacture)
+
+
+                {
+                    <form asp-action="SaveDetails" method="post" style="display:inline;">
+                        @Html.HiddenFor(model => model.ArrivageId)
+                        <button type="submit" class="btn btn-success" style="margin-right: 130px;" onclick="return validateForm()">Enregistrer</button>
+                    </form>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-success" disabled>Enregistrer</button>
+                }
+            </div>
+        </form>
+        
+
+    </div>
+
+    <!-- Carte d'informations de l'arrivage à droite -->
+    <div class="col-md-4" >
+        <div class="info-arrivage">
+            <h3>Informations de l'Arrivage</h3>
+            <p><strong>Société:</strong> @Model.SocieteNom</p>
+            <p><strong>Fournisseur:</strong> @Model.NomFournisseur</p>
+            <p><strong>N° Bon de livraison:</strong> @Model.NumBL</p>
+            <p><strong>N° Facture:</strong> @Model.NumFacture</p>
+            <p><strong>Date d'arrivage:</strong> @Model.DateArrivage.ToString("dd/MM/yyyy")</p>
+            <p><strong>Montant de la facture:</strong> @Model.MontantFacture Euro</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+<table class="table" >
+    <thead>
+        <tr>
+            <th>Article</th>
+            <th>N° de Série</th>
+            <th>Quantité Reçue</th>
+            <th>Prix d'achat (Devise)</th>
+            <th>Prix d'achat (MAD)</th>
+            <th>Taux de Remise</th>
+            <th>Prix d'achat Net (Devise)</th>
+            <th>Prix d'achat Net (MAD)</th>
+            <th>Prix d'achat Total (Devise)</th> <!-- Nouveau champ -->
+            <th>Prix d'achat Remisé (Devise)</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detail in Model.ArrivageDetails)
+        {
+            <tr>
+                <td>@detail.ArticleId</td>
+                <td>@detail.NumSerie</td>
+                <td>@detail.QuantiteRecuParArticle</td>
+                <td>@detail.PrixDachatDevise</td>
+                <td>@detail.PrixDachatMAD</td>
+                <td>@detail.TauxRemise</td>
+                <td>@detail.PrixAchatNetDevise</td>
+                <td>@detail.PrixAchatNetMAD</td>
+                <td>@(detail.PrixDachatDevise * detail.QuantiteRecuParArticle)</td> <!-- Calculé dans la vue -->
+                <td>@((detail.PrixDachatDevise * detail.QuantiteRecuParArticle) * (1 - (detail.TauxRemise / 100)))</td> <!-- Calculé dans la vue -->
+                <td>
+                    <!-- Formulaire de suppression -->
+                    <form asp-action="DeleteDetailFromSession" method="post" style="display:inline;">
+                        <input type="hidden" name="numSerie" value="@detail.NumSerie" />
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fas fa-times" style="color: red;" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+    
+</table>
+<div style=" margin-top: 20px; background-color: @(montantRestant >= 0 ? "green" : "red"); height: 70px; display: flex; justify-content: center; align-items: center; color: @(montantRestant > 0 ? "white" : "white"); " >
+    @if (montantRestant > 0)
+    {
+        <p><strong>Montant restant : </strong>@montantRestant Euro</p>
+    }
+    else if (montantRestant == 0)
+    {
+        <p><strong>Le montant total des détails égale le montant de la facture.</strong></p>
+    }
+    
+    else
+    {
+        <p><strong>Le montant total des détails dépasse le montant de la facture.</strong></p>
+    }
+</div>
+
+
+
+@section Scripts {
+    <script>
+
+function validateForm() {
+            const form = document.getElementById('arrivageForm');
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(function(field) {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid'); // Optionnel : pour ajouter un style visuel
+                } else {
+                    field.classList.remove('is-invalid'); // Optionnel : pour retirer le style visuel
+                }
+            });
+
+            if (!isValid) {
+                alert('Veuillez remplir tous les champs obligatoires.');
+                return false; // Empêche l'envoi du formulaire
+            }
+
+            return true; // Permet d'envoyer le formulaire si tout est valide
+        }
+
+        // Attacher un événement "click" à l'icône
+    document.getElementById('iconButton').addEventListener('click', function() {
+        // Ouvrir la fenêtre de sélection de fichier
+        document.getElementById('fileInput').click();
+    });
+
+    // Lorsque le fichier est sélectionné, soumettre le formulaire
+    document.getElementById('fileInput').addEventListener('change', function() {
+        document.getElementById('excelForm').submit();
+    });
+        document.addEventListener('DOMContentLoaded', function () {
+            //alert("JavaScript chargé !"); // Pour vérifier le chargement du JavaScript
+
+            // Sélectionner les éléments avec querySelector
+            const articleSelect = document.querySelector('#articleSelect');
+            const marqueInput = document.querySelector('#marqueInput');
+
+            // Vérification de la présence des éléments
+            if (!articleSelect) {
+                console.error("L'élément articleSelect n'existe pas !");
+            } else {
+                console.log("Élément articleSelect trouvé.");
+            }
+
+            if (!marqueInput) {
+                console.error("L'élément marqueInput n'existe pas !");
+            } else {
+                console.log("Élément marqueInput trouvé.");
+            }
+
+            // Ajouter l'écouteur d'événements si articleSelect existe
+            if (articleSelect) {
+                articleSelect.addEventListener('change', function () {
+                    console.log("Événement change déclenché");
+                    const articleId = this.value;
+                    console.log("Article sélectionné :", articleId);
+
+                    fetch(`/ArrivageDetailsMvc/GetMarqueByArticleId?articleId=${articleId}`, {
+                        method: 'GET'
+                    })
+                    .then(response => {
+                        console.log("Réponse reçue :", response); // Log de la réponse complète
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Données JSON reçues :", data);
+                        if (marqueInput) {
+                            marqueInput.value = data.marque || '';
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Erreur lors de la requête Fetch :", error);
+                    });
+                });
+            }
+        });
+
+
+
+        // Nouveau script pour la gestion de la suppression des détails d'arrivage
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteForms = document.querySelectorAll('form[asp-action="DeleteDetailFromSession"]');
+
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    if (!confirm('Êtes-vous sûr de vouloir supprimer ce détail d\'arrivage ?')) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<style>
+   /* Ajustement général pour aligner le formulaire à gauche et la carte d'informations à droite */
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.icon-red {
+    color: red;
+}
+
+
+.col-md-8 {
+    flex: 0 0 65%;
+    margin-right: 2%;
+    height: 700px;
+    max-height: 100%;
+}
+
+.col-md-4 {
+    flex: 0 0 30%;
+    background-color: #87a5ea;
+    border-radius: 8px;
+    padding: 0px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-right: 340px;
+    display: flex;
+   justify-content: center; /* Centre horizontalement */
+      
+    align-items: center;
+   
+    
+}
+
+/* Styles pour le conteneur d'informations */
+.info-arrivage {
+    background-color: #87a5ea; /* Couleur de fond ajustée */
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; 
+    
+}
+
+.info-arrivage h3 {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.info-arrivage p {
+    margin: 5px 0;
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Styles pour le formulaire */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 0 0 48%;
+    margin-right: 4%;
+    margin-bottom: 15px;
+}
+
+.form-group:last-child {
+    margin-right: 0;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-group input,
+.form-group select {
+    width: 350px;
+    padding: 8px;
+    border: 1px solid #7b84e4;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Boutons */
+/* Style pour les boutons */
+.btn-primary, .btn-secondary, .btn-success {
+  
+   
+    font-size: 20px; /* Taille du texte */
+    padding: 10px 30px; /* Taille du bouton */
+   
+    border: none; /* Enlever la bordure */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Effet d'ombre */
+    text-align: center;
+    display: inline-block; /* Alignement des boutons */
+
+
+     background-color: #230cf4;
+        border: none;
+        color: white;
+        width: 150px;
+      
+        border-radius: 5px;
+}
+
+/* Styles pour le bouton désactivé (Enregistrer) */
+.btn-success:disabled {
+    background-color: #d3d3d3; /* Grisé pour désactiver */
+    color: #999999; /* Texte gris clair */
+    border-color: #d3d3d3;
+    cursor: not-allowed;
+}
+
+/* Espacement des boutons */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px; /* Espacement supérieur */
+}
+
+/* Ajout d'effet au survol */
+.btn-primary:hover, .btn-secondary:hover, .btn-success:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+
+/* Tableau des détails de l'arrivage */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Styles pour le résumé et le total */
+.summary {
+    background-color: #e8f5e9; /* Couleur de fond verte claire pour le résumé */
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: green; /* Couleur du texte verte pour correspondre au style */
+}
+
+.total {
+    background-color: #d4edda; /* Couleur de fond verte pâle */
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: green; /* Couleur du texte verte */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0;
+}
+
+.no-border {
+    border: none !important; /* Supprime la bordure */
+    box-shadow: none; /* Supprime l'ombre de la bordure si elle est présente */
+    background-color: transparent; /* Rendre l'arrière-plan transparent */
+}
+
+
+
+
+/* Style du bouton "+" rond */
+.btn-round {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #599bde;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px; /* Espacement entre le champ et le bouton */
+}
+
+.btn-round:hover {
+    background-color: #003366;
+}
+
+/* S'assurer que le champ et le bouton sont bien alignés */
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+
+</style>

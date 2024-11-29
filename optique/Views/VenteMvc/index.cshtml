@@ -1,0 +1,374 @@
+@model optique.ViewModels.VenteViewModel
+
+<div class="vente-container">
+    <div class="header">
+        <div class="breadcrumb">
+            <a href="@Url.Action("Index", "Acceuil")">Accueil</a> &gt;
+            <span>Ventes</span>
+        </div>
+        <div class="buttons">
+            <a class="calendar-button" href="@Url.Action("Calendar", "VenteMvc")">📅 Calendrier</a>
+
+            <a class="new-vente-button" href="@Url.Action("Index", "StockParMagasin")">+ Nouvelle vente</a>
+        </div>
+    </div>
+
+    <form asp-action="Index" method="get" class="filters">
+        <div class="custom-select-container">
+            <select name="client">
+                <option value="">Stock</option>
+                @foreach (var client in Model.Clients ?? new List<string>())
+                {
+                    if (client == Model.SelectedClient)
+                    {
+                        <option value="@client" selected="selected">@client</option>
+                    }
+                    else
+                    {
+                        <option value="@client">@client</option>
+                    }
+                }
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <div class="custom-select-container">
+            <select name="marque">
+                <option value="">Marque</option>
+                @foreach (var marque in Model.Marques ?? new List<string>())
+                {
+                    if (marque == Model.SelectedMarque)
+                    {
+                        <option value="@marque" selected="selected">@marque</option>
+                    }
+                    else
+                    {
+                        <option value="@marque">@marque</option>
+                    }
+                }
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <div class="custom-select-container">
+            <select name="typeArticle">
+                <option value="">Type article</option>
+                @foreach (var type in Model.TypesArticle ?? new List<string>())
+                {
+                    if (type == Model.SelectedTypeArticle)
+                    {
+                        <option value="@type" selected="selected">@type</option>
+                    }
+                    else
+                    {
+                        <option value="@type">@type</option>
+                    }
+                }
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <div class="input-container">
+           <input type="text" name="reference" placeholder="Recherche par référence" value="@(Model.Reference != null ? Model.Reference : "")" />
+
+            <button class="search-button" type="submit"></button>
+        </div>
+
+        <a class="reset-button" href="@Url.Action("Index", "VenteMvc")">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#004080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 10 10M12 2v4M12 2l3-3M12 2l-3-3"></path>
+            </svg>
+        </a>
+    </form>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date de vente</th>
+                    <th>Stock</th>
+                    <th>Client</th>
+                    <th>Marque</th>
+                    <th>Référence</th>
+                    <th>Prix de vente</th>
+                    <th>N° bon</th>
+                    <th>Type article</th>
+                    <th>Quantité</th>
+                    <th>Type de paiement</th>
+                    <th>Détails paiement</th>
+                    <th></th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+    @if (Model.VenteDetails.Any())
+    {
+        foreach (var detail in Model.VenteDetails)
+        {
+            <tr>
+                <td>@detail.DateDeVente.ToString("dd/MM/yyyy")</td>
+                <td>@detail.Client</td>
+                <td>@detail.ClientAcheteur</td>
+                <td>@detail.Marque</td>
+                <td>@detail.Reference</td>
+                <td>@detail.PrixDeVente.ToString("C")</td>
+                <td>@detail.NumBon</td>
+                <td>@detail.TypeArticle</td>
+                <td>@detail.Quantite</td>
+                <td>@detail.TypeDePaiement</td>
+                <td>@detail.DetailsPaiement</td>
+                 
+                
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="10">Aucune vente</td>
+        </tr>
+    }
+</tbody>
+
+        </table>
+    </div>
+</div>
+
+
+
+<style>
+  
+
+.vente-container {
+  width: 100%;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb a {
+  color: #004080;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  color: #666;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.new-vente-button, .calendar-button {
+  padding: 10px 20px;
+  background-color: white;
+  color: black;
+  border: 1px solid #e9e1e1;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+.new-vente-button:hover, .calendar-button:hover {
+  background-color: #f0f0f0;
+}
+
+.filters {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-select-container {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+}
+
+.custom-select-container select {
+  width: 100%;
+  padding: 10px;
+  padding-right: 40px;
+  border: 1px solid #004080;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  font-weight: 400;
+  font-size: 14px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.select-arrow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  background-color: #004080;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #fff;
+}
+
+.input-container {
+  position: relative;
+  width: 250px;
+}
+
+.input-container input[type="text"] {
+  width: 100%;
+  padding: 10px 35px 10px 10px;
+  border: 1px solid #004080;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.input-container input[type="text"]::placeholder {
+  color: #666;
+}
+
+.search-button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #004080;
+  font-size: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-button::before {
+  content: '\1F50D';
+  font-size: 16px;
+  color: #004080;
+}
+
+.reset-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reset-button svg {
+  width: 24px;
+  height: 24px;
+  stroke: #004080;
+}
+
+.table-container {
+  max-height: 100vh;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 15px;
+}
+
+thead th {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-bottom: 2px solid #dee2e6;
+  font-weight: bold;
+  text-align: left;
+}
+
+tbody tr {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+tbody td {
+  padding: 15px;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 14px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody td:first-child {
+  border-left: 1px solid #ddd;
+  border-radius: 8px 0 0 8px;
+}
+
+tbody td:last-child {
+  border-right: 1px solid #ddd;
+  border-radius: 0 8px 8px 0;
+}
+
+tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+
+
+
+
+
+
+
+
+
+
+</style>

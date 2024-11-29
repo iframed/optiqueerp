@@ -1,0 +1,352 @@
+@model optique.ViewModels.StockParMagasinViewModel
+
+@{
+    ViewData["Title"] = "Stock par magasin";
+}
+
+<div class="stock-container">
+    <div class="header">
+        <div class="breadcrumb">
+            <a href="@Url.Action("Index", "Acceuil")">Accueil</a> &gt;
+            <span>Stock par magasin</span>
+        </div>
+         <a class="new-distribution-button" href="@Url.Action("Index", "ArrivageDetailsMvc")">+ Nouvelle distribution</a>
+    </div>
+
+    <form method="get" class="filters">
+        <!-- Filtre pour les clients -->
+        <div class="custom-select-container">
+            <select id="clientFilter" class="form-select" onchange="applyFilters()">
+                <option value="">Client</option>
+                @foreach (var client in Model.Clients)
+                {
+                    <option value="@client.NomClient">@client.NomClient</option> <!-- Utilisation du nom du client -->
+                }
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <!-- Filtre pour les fournisseurs -->
+        <div class="custom-select-container">
+            <select id="fournisseurFilter" class="form-select" onchange="applyFilters()">
+                <option value="">Fournisseur</option>
+                @foreach (var fournisseur in Model.Fournisseurs)
+                {
+                    <option value="@fournisseur.Id">@fournisseur.NomFournisseur</option>
+                }
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <!-- Filtre pour les marques -->
+        <div class="custom-select-container">
+            <select id="marqueFilter" class="form-select" onchange="applyFilters()">
+                <option value="">Marque</option>
+                @foreach (var marque in Model.Marques)
+                {
+                    <option value="@marque.Id">@marque.Libelle</option>
+                }
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+
+        <!-- Recherche par référence -->
+        <div class="input-container">
+            <input type="text" id="search" class="form-control" placeholder="Recherche par référence" onkeyup="applyFilters()" />
+            <button class="search-button" type="button"></button>
+        </div>
+
+        <!-- Bouton pour réinitialiser les filtres -->
+        <a class="reset-button" href="javascript:void(0)" onclick="resetFilters()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#004080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 10 10M12 2v4M12 2l3-3M12 2l-3-3"></path>
+            </svg>
+        </a>
+    </form>
+
+    <div class="table-container">
+        <table class="distribution-table">
+            <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Marque</th>
+                    <th>Référence</th>
+                    <th>Couleur</th>
+                    <th>Type client</th>
+                    <th>Description</th>
+                    <th>Type article</th>
+                    <th>Quantité distribue </th>
+                    <th>Quantité Restante</th> 
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var article in Model.Articles)
+                {
+                    <tr>
+                        <td>@article.ClientNom</td>
+                        <td>@article.MarqueLibelle</td>
+                        <td>@article.Reference</td>
+                        <td>@article.Couleur</td>
+                        <td>@article.TypeClientLibelle</td>
+                        <td>@article.Description</td>
+                        <td>@article.TypeLibelle</td>
+                        <td>@article.QuantiteDistribuee</td>
+                        <td>@article.QuantiteRestante</td> 
+                        
+                        <td>
+    <a asp-action="NouvelleVente" asp-route-clientId="@article.ClientId" asp-route-articleId="@article.Id" class="btn btn-success btn-sm">
+        🛒
+    </a>
+</td>
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function applyFilters() {
+        var clientName = document.getElementById('clientFilter').value;
+        var fournisseurId = document.getElementById('fournisseurFilter').value;
+        var marqueId = document.getElementById('marqueFilter').value;
+        var search = document.getElementById('search').value;
+
+        var url = '@Url.Action("Index", "StockParMagasin")';
+        window.location.href = url + '?clientName=' + clientName + '&fournisseurId=' + fournisseurId + '&marqueId=' + marqueId + '&search=' + search;
+    }
+
+    function resetFilters() {
+        document.getElementById('clientFilter').selectedIndex = 0; // Reset selection
+        document.getElementById('fournisseurFilter').value = '';
+        document.getElementById('marqueFilter').value = '';
+        document.getElementById('search').value = '';
+        applyFilters();
+    }
+</script>
+
+
+
+
+<style>
+    .stock-container {
+        width: 100%;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .breadcrumb {
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        align-items: center;
+    }
+
+    .breadcrumb a {
+        color: #004080;
+        text-decoration: none;
+        margin-right: 5px;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb span {
+        color: #666;
+    }
+
+    .new-distribution-button {
+        padding: 10px 20px;
+        background-color: white;
+        color: black;
+        border: 1px solid #e9e1e1;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 300;
+    }
+
+    .new-distribution-button:hover {
+        background-color: #f0f0f0;
+    }
+
+    .filters {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custom-select-container {
+        position: relative;
+        display: inline-block;
+        width: 200px;
+    }
+
+    .custom-select-container select {
+        width: 100%;
+        padding: 10px;
+        padding-right: 40px;
+        border: 1px solid #004080;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #333;
+        font-weight: 400;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .select-arrow {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 100%;
+        background-color: #004080;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .triangle {
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid #fff;
+    }
+
+    .input-container {
+        position: relative;
+        width: 250px;
+    }
+
+    .input-container input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        padding-right: 40px;
+        border: 1px solid #004080;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333;
+        box-sizing: border-box;
+    }
+
+    .input-container input[type="text"]::placeholder {
+        color: #666;
+    }
+
+    .search-button {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: #004080;
+        font-size: 16px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-button::before {
+        content: '\1F50D';
+        font-size: 16px;
+        color: #004080;
+    }
+
+    .reset-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reset-button svg {
+        width: 24px;
+        height: 24px;
+        stroke: #004080;
+    }
+
+    .table-container {
+        max-height: 100vh;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    table.distribution-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+    thead th {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    tbody tr {
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    tbody td {
+        padding: 15px;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 14px;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tbody td:first-child {
+        border-left: 1px solid #ddd;
+        border-radius: 8px 0 0 8px;
+    }
+
+    tbody td:last-child {
+        border-right: 1px solid #ddd;
+        border-radius: 0 8px 8px 0;
+    }
+
+    tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+</style>

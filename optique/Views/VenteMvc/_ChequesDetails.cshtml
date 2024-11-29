@@ -1,0 +1,103 @@
+@model IEnumerable<optique.Dtos.ChequeDueDateDTO>
+
+<div class="cheque-details-container">
+    <div class="cheque-details">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    @if (Model != null && Model.Any())
+                    {
+                        <th>@(Model.FirstOrDefault()?.IsFromFournisseur == true ? "Fournisseur" : "Stock")</th>
+                    }
+                    else
+                    {
+                        <th>Type</th> <!-- Valeur par défaut si le modèle est vide -->
+                    }
+                    <th>Client</th>
+                    <th>N° de chèque</th>
+                    <th>N° de LCN</th>
+                    <th>Date d'échéance</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var cheque in Model)
+                    {
+                        <tr>
+                            <td>@(cheque.IsFromFournisseur ? cheque.FournisseurName : cheque.ClientName)</td>
+                            <td>@cheque.ClientAcheteurName</td>
+                            <td>@cheque.NCheque</td>
+                            <td>@cheque.NLCN</td>
+                            
+                            <td>@cheque.DateEcheance?.ToString("dd/MM/yyyy")</td>
+                            <td>@cheque.Amount €</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">Aucun chèque disponible</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<style>
+.cheque-details-container {
+    display: flex;
+    justify-content: center;  /* Centrer horizontalement */
+    align-items: center;      /* Centrer verticalement */
+    min-height: 100vh;        /* Faire en sorte que l'élément prenne la hauteur de la vue */
+    background-color: #f4f4f9; /* Fond de la page */
+}
+
+.cheque-details {
+    width: 80%;               /* Largeur du tableau */
+    max-width: 800px;          /* Largeur maximale */
+    background-color: #fff;    /* Fond blanc pour la table */
+    padding: 20px;             /* Espace intérieur pour donner un peu de respiration */
+    border-radius: 10px;       /* Coins arrondis */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);  /* Ombre légère pour effet */
+}
+
+.table {
+    width: 100%;               /* Table prend toute la largeur de son conteneur */
+    margin: 0 auto;            /* Centre la table */
+}
+
+.table th, .table td {
+    text-align: center;        /* Texte centré dans les cellules */
+    padding: 12px 8px;         /* Espacement dans les cellules */
+    font-size: 14px;           /* Taille de police ajustée */
+}
+
+.table th {
+    background-color: #007bff; /* Couleur d'arrière-plan des en-têtes */
+    color: white;              /* Couleur du texte des en-têtes */
+    border-bottom: 2px solid #ddd;
+}
+
+.table td {
+    border: 1px solid #ddd;    /* Bordure autour des cellules */
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Couleur de fond alternée pour les lignes */
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1; /* Couleur de fond au survol des lignes */
+}
+
+td[colspan="5"] {
+    text-align: center;
+    font-style: italic;         /* Texte centré et en italique pour les messages "Aucun chèque disponible" */
+}
+</style>

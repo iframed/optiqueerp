@@ -1,0 +1,135 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = optique
+build_property.RootNamespace = optique
+build_property.ProjectDir = /Users/moha/Desktop/optique.net/optique/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /Users/moha/Desktop/optique.net/optique
+build_property._RazorSourceGeneratorDebug = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/Acceuil/Acceuil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjZXVpbC9BY2NldWlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ArrivageDetailsMvc/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJyaXZhZ2VEZXRhaWxzTXZjL0NyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ArrivageDetailsMvc/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJyaXZhZ2VEZXRhaWxzTXZjL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ArrivageMvc/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJyaXZhZ2VNdmMvQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ArrivageMvc/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJyaXZhZ2VNdmMvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ArrivageMvc/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJyaXZhZ2VNdmMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ArticleMvc/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJ0aWNsZU12Yy9DcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ArticleMvc/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJ0aWNsZU12Yy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/Auth/login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXV0aC9sb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/BaseDeDonnees/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmFzZURlRG9ubmVlcy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ClientMvc/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2xpZW50TXZjL0NyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/ClientMvc/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2xpZW50TXZjL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/DistributionMvc/create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGlzdHJpYnV0aW9uTXZjL2NyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/DistributionMvc/index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGlzdHJpYnV0aW9uTXZjL2luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/FournisseurMvc/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm91cm5pc3NldXJNdmMvQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/FournisseurMvc/index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm91cm5pc3NldXJNdmMvaW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/RetourFournisseurMvc/create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmV0b3VyRm91cm5pc3NldXJNdmMvY3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/RetourFournisseurMvc/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmV0b3VyRm91cm5pc3NldXJNdmMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/SocieteMvc/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU29jaWV0ZU12Yy9DcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/SocieteMvc/index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU29jaWV0ZU12Yy9pbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/Stock/StockIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU3RvY2svU3RvY2tJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/StockParArticle/StockParArticle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU3RvY2tQYXJBcnRpY2xlL1N0b2NrUGFyQXJ0aWNsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/StockParMagasin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU3RvY2tQYXJNYWdhc2luL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/StockParMagasin/NouvelleVente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU3RvY2tQYXJNYWdhc2luL05vdXZlbGxlVmVudGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/VenteMvc/Calendar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudGVNdmMvQ2FsZW5kYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/VenteMvc/index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudGVNdmMvaW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/VenteMvc/_ChequesDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudGVNdmMvX0NoZXF1ZXNEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/moha/Desktop/optique.net/optique/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Mon Application</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Inclure vos CSS et autres liens ici -->
+</head>
+<body>
+    <!-- Menu de navigation ou en-tête -->
+    <header>
+        <!-- Contenu de l'en-tête -->
+    </header>
+
+    <!-- Contenu principal -->
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <!-- Pied de page -->
+    <footer>
+        <!-- Contenu du pied de page -->
+    </footer>
+
+    <!-- Section Scripts -->
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

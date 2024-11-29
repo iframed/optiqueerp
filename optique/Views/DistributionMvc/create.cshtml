@@ -1,0 +1,355 @@
+@model optique.ViewModels.DistributionCreateViewModel
+
+<div class="distribution-page-container">
+    
+    <div class="distribution-form-container">
+        <div class="breadcrumb" >
+            <a href="@Url.Action("Index", "Acceuil")" class="breadcrumb-link">Accueil</a> &gt;
+             <a href="@Url.Action("Index", "ArrivageDetailsMvc")" class="breadcrumb-link">Arrivage</a> &gt;
+            <span>Nouvelle Distribution</span>
+        </div>
+       
+
+        <form asp-action="Create" method="post" style="margin-top: 100px;">
+            <input type="hidden" asp-for="ArrivageDetailsId" />
+             
+
+            <div class="row">
+    
+    <div class="col">
+        <div class="form-group">
+    <label asp-for="SocieteId" class="control-label">Société:</label>
+    <div class="input-group">
+        <select asp-for="SocieteId" class="form-control" asp-items="Model.Societes"></select>
+        <div class="input-group-append">
+            <a href="@Url.Action("Create", "FournisseurMvc")" class="add-btn btn-round">+</a>
+        </div>
+    </div>
+    <span asp-validation-for="SocieteId" class="text-danger"></span>
+</div>
+
+    </div>
+
+
+    <div class="col">
+        <div class="form-group">
+            <label asp-for="ClientId" class="control-label">Client:</label>
+            <select asp-for="ClientId" class="form-control" asp-items="Model.Clients" class="custom-select"></select>
+            <span asp-validation-for="ClientId" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+
+            <div class="row">
+                  <div class="col">
+                    <!--<div class="form-group">
+                        <label asp-for="DateDistribution" class="control-label">Date de Distribution:</label>
+                        <input asp-for="DateDistribution" class="form-control" type="date" />
+                        <span asp-validation-for="DateDistribution" class="text-danger"></span>
+                    </div>-->
+                    <div class="form-group date-input-container">
+    <label asp-for="DateDistribution" class="control-label">Date de Distribution:</label>
+    <div class="input-group">
+        <input asp-for="DateDistribution" class="form-control" type="date" />
+        <div class="input-group-append">
+            <span class="input-group-text">
+                <i class="fas fa-calendar-alt"></i> <!-- Icône de calendrier -->
+            </span>
+        </div>
+    </div>
+    <span asp-validation-for="DateDistribution" class="text-danger"></span>
+</div>
+
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Quantite" class="control-label">Quantité:</label>
+                        <input asp-for="Quantite" class="form-control" type="number" />
+                        <span asp-validation-for="Quantite" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="PrixDeVente" class="control-label">Prix de Vente:</label>
+                        <input asp-for="PrixDeVente" class="form-control" type="number" step="0.01" />
+                        <span asp-validation-for="PrixDeVente" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="NumFacture" class="control-label">Numéro de Facture:</label>
+                        <input asp-for="NumFacture" class="form-control" type="text" />
+                        <span asp-validation-for="NumFacture" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="StatutDistributionId" class="control-label">Statut:</label>
+                        <select asp-for="StatutDistributionId" class="form-control" asp-items="Model.StatutsDistribution"></select>
+                        <span asp-validation-for="StatutDistributionId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+           
+   
+   <!-- <a asp-action="Index" class="btn-secondary">Annuler</a>-->
+   <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "DistributionMvc")'">Annuler</button> <!-- Utilisation de JavaScript pour la redirection -->
+</div>
+
+
+
+        </form>
+    </div>
+
+    @* Détails de l'arrivage *@
+    @if (Model.ArticleDetails != null)
+    {
+        <div class="arrivage-details-container">
+            <h4 style="text-align: center;">Détails</h4>
+            <p><strong>Date d'arrivage:</strong> @Model.ArticleDetails.DateArrivage.ToShortDateString()</p>
+            <p><strong>Société:</strong> @Model.ArticleDetails.Societe</p>
+            <p><strong>Fournisseur:</strong> @Model.ArticleDetails.Fournisseur</p>
+            <p><strong>Référence du produit:</strong> @Model.ArticleDetails.Reference</p>
+            <p><strong>Quantité livrée:</strong> @Model.ArticleDetails.Livre</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+<style>
+
+    .breadcrumb-link {
+    text-decoration: none; /* Enlève la ligne sous le lien */
+    font-size: 20px; /* Agrandit le texte (vous pouvez ajuster la taille selon votre besoin) */
+    color: inherit; /* Conserve la couleur actuelle du lien */
+}
+
+.breadcrumb-link:hover {
+    text-decoration: underline; /* Optionnel : si vous souhaitez ajouter un soulignement au survol */
+}
+
+ 
+    
+    .distribution-page-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .distribution-form-container {
+        flex: 3;
+        max-width: 60%;
+        padding-right: 20px;
+    }
+
+    .arrivage-details-container {
+        flex: 2;
+        background-color: #87a5ea;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 35%;
+        height: 500px;
+        margin-top: 50px;
+        margin-right: 20px;
+        text-align: center;
+
+    }
+    .arrivage-details-container p {
+    margin-bottom: 40px; 
+    font-size: 20px;
+}
+
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        margin-left: 50px;
+    }
+
+    .col {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+         display: flex;
+    flex-direction: column; /* Force les labels et champs à être en colonne */
+    align-items: flex-start; /* Aligner les labels et champs à gauche */
+    }
+
+    .form-actions {
+    text-align: center;
+    margin-top: 20px;
+    gap: 50px;
+    
+}
+
+
+    label.control-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #7f8182;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        max-width: 300px;
+        border-radius: 4px;
+        border: 1px solid blue;
+        box-sizing: border-box;
+        height: 40px;
+    }
+
+    .btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 20px;
+    }
+
+    .btn-primary {
+        background-color: #230cf4;
+        border: none;
+        color: white;
+        width: 200px;
+        margin: 40px;
+        border-radius: 5px;
+       
+    }
+    .btn-primary:hover {
+        background-color: #3281d6; /* Change la couleur de fond au survol */
+        cursor: pointer; /* Change le curseur en pointeur */
+    }
+    .btn-secondary:hover {
+        background-color: #3281d6; /* Change la couleur de fond au survol */
+        cursor: pointer; /* Change le curseur en pointeur */
+    }
+
+   
+
+    .btn-secondary {
+    background-color: #230cf4;
+    border: none;
+    color: white; 
+ border-radius: 5px;
+    width: 200px;
+}
+
+
+   
+
+    .text-danger {
+        color: #dc3545;
+    }
+
+
+
+.input-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+   
+    
+}
+
+
+
+
+/*.input-group-append {
+    display: flex;
+    align-items: center;
+    position: absolute; 
+    right: 1083px;
+    top: 30%;
+    transform: translateY(-50%);
+    pointer-events: none; 
+    margin-left: 10px;
+     
+}*/
+
+
+.fas {
+ display: flex;
+    align-items: center;
+    position: absolute; 
+    right: 1085px;
+    top: 30%;
+    transform: translateY(-50%);
+    pointer-events: none; 
+    margin-left: 10px;
+
+}
+.input-group-append {
+    margin-left: 10px; /* Ajoute un petit espace entre le champ et le bouton */
+    display: flex;
+    align-items: center;
+}
+
+.input-group-text {
+    background-color: transparent; /* Fond transparent */
+    border: none;
+    padding: 02px; /* Enlever le padding par défaut */
+}
+
+.input-group-text i {
+    font-size: 29px; /* Taille de l'icône */
+    color: #3281d6; /* Couleur de l'icône */
+}
+
+.btn-round {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #599bde;
+    color: rgb(15, 52, 239);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-round:hover {
+    background-color: #7b8690;
+    color: black;
+}
+
+
+
+/* Masquer les chevrons natifs du select */
+
+.custom-select {
+    appearance: none; /* Masque les chevrons natifs */
+    -webkit-appearance: none; /* Masque dans les navigateurs WebKit */
+    -moz-appearance: none; /* Masque dans Firefox */
+    background-color: white;
+    border: 1px solid blue;
+    padding: 10px;
+    padding-right: 40px; /* Laisse de l'espace pour l'icône personnalisée */
+    font-size: 16px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+</style>

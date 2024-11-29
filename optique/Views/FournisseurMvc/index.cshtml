@@ -1,0 +1,317 @@
+@model IEnumerable<optique.Dtos.FournisseurDTO>
+
+<div class="fournisseur-container">
+    <div class="header">
+        <div class="breadcrumb">
+            <a href="@Url.Action("Index", "Acceuil")">Accueil</a> &gt;
+            <span>Fournisseur</span>
+        </div>
+        <a class="new-fournisseur-button" href="@Url.Action("Create", "FournisseurMvc")">+ Nouveau Fournisseur</a>
+    </div>
+
+    <form asp-action="Index" method="get" class="filters">
+        <div class="custom-select-container">
+            <select name="deviseLibelle">
+                <option value="">Devise</option>
+                @foreach (var devise in ViewBag.Devises as List<string> ?? new List<string>())
+                {
+                    if (devise == ViewBag.DeviseLibelle)
+                    {
+                        <option value="@devise" selected="selected">@devise</option>
+                    }
+                    else
+                    {
+                        <option value="@devise">@devise</option>
+                    }
+                }
+            </select>
+            <div class="select-arrow">
+                <div class="triangle"></div>
+            </div>
+        </div>
+        <div class="input-container">
+            <input type="text" name="ice" placeholder="Recherche par ICE" value="@ViewBag.ICE" />
+            <button class="search-button" type="submit"></button> <!-- Ajout de l'icône loupe -->
+
+        </div>
+    </form>
+    
+    <!-- Move reset button outside the form -->
+    <button type="button" class="reset-button" onclick="resetFilters()">&#x21bb;</button>
+
+    <div class="table-container">
+        <table class="fournisseur-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom Fournisseur</th>
+                    <th>Adresse</th>
+                    <th>Telephone</th>
+                    <th>Devise</th>
+                    <th>ICE</th>
+                    <th>Pays</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var fournisseur in Model)
+                    {
+                        <tr>
+                            <td>@fournisseur.Id</td>
+                            <td>@fournisseur.NomFournisseur</td>
+                            <td>@fournisseur.Adresse</td>
+                            <td>@fournisseur.Telephone</td>
+                            <td>@fournisseur.DeviseLibelle</td>
+                            <td>@fournisseur.ICE</td>
+                            <td>@fournisseur.Pays</td>
+                           <!-- <td><a class="action-button" href="@Url.Action("Details", "FournisseurMvc", new { id = fournisseur.Id })">&#128065;</a></td>
+                            <td><a class="action-button" href="@Url.Action("Edit", "FournisseurMvc", new { id = fournisseur.Id })">&#128394;</a></td>-->
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9">Aucune donnée disponible</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function resetFilters() {
+        window.location.href = '@Url.Action("Index", "FournisseurMvc")';
+    }
+</script>
+
+
+
+
+<style>
+    
+  .fournisseur-container {
+    width: 100%;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .breadcrumb {
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    align-items: center;
+  }
+  
+  .breadcrumb a {
+    color: #004080;
+    text-decoration: none;
+    margin-right: 5px;
+  }
+  
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  
+  .breadcrumb span {
+    color: #666;
+  }
+  
+  .new-fournisseur-button {
+    padding: 10px 20px;
+    background-color: white;
+    color: black;
+    border: 1px solid #e9e1e1;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 300;
+  }
+  
+  .new-fournisseur-button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .filters {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .custom-select-container {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+  }
+  
+  .custom-select-container select {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border: 1px solid #004080;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    font-weight: 400;
+    font-size: 14px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  
+  .select-arrow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 100%;
+    background-color: #004080;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #fff;
+  }
+  
+  .input-container {
+    position: relative;
+    width: 250px;
+  }
+  
+  .input-container input[type="text"] {
+    width: 100%;
+    padding: 10px 35px 10px 10px;
+    border: 1px solid #004080;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+  }
+  
+  .input-container input[type="text"]::placeholder {
+    color: #666;
+  }
+  
+  .search-button {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #004080;
+    font-size: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .search-button::before {
+    content: '\1F50D';
+    font-size: 16px;
+    color: #004080;
+  }
+  
+  .reset-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .reset-button svg {
+    width: 24px;
+    height: 24px;
+    stroke: #004080;
+  }
+  
+  .table-container {
+    max-height: 100vh;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  table.fournisseur-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 15px;
+  }
+  
+  thead th {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  tbody tr {
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  tbody td {
+    padding: 15px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  tbody td:first-child {
+    border-left: 1px solid #ddd;
+    border-radius: 8px 0 0 8px;
+  }
+  
+  tbody td:last-child {
+    border-right: 1px solid #ddd;
+    border-radius: 0 8px 8px 0;
+  }
+  
+  tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+</style>

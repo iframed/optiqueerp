@@ -1,0 +1,242 @@
+@model IEnumerable<optique.Dtos.SocieteDTO>
+
+<div class="societe-container">
+    <div class="header">
+        <div class="breadcrumb">
+            <a href="@Url.Action("Index", "Acceuil")">Accueil</a> &gt;
+            <span>Sociétés</span>
+        </div>
+          <a class="new-societe-button" href="@Url.Action("Create", "SocieteMvc")">+ Nouvelle Société</a>
+       
+    </div>
+    
+
+    
+
+    <form asp-action="Index" method="get" class="filters">
+        <div class="input-container">
+            <input type="text" name="adresse" placeholder="Rechercher par adresse" value="@ViewBag.Adresse" />
+            <button class="search-button" type="submit">&#x1F50D;</button>
+        </div>
+    </form>
+
+    <button type="button" class="reset-button" onclick="resetFilters()">&#x21bb;</button>
+
+    <div class="table-container">
+        <table class="societe-table">
+            <thead>
+                <tr>
+                    <th>Nom Société</th>
+                    <th>Adresse</th>
+                    <th>Numéro de Téléphone</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var societe in Model)
+                    {
+                        <tr>
+                            <td>@societe.NomSociete</td>
+                            <td>@societe.Adresse</td>
+                            <td>@societe.NumTelephone</td>
+                           <!-- <td><a class="action-button" href="@Url.Action("Details", "SocieteMvc", new { id = societe.Id })">&#128065;</a></td>
+                            <td><a class="action-button" href="@Url.Action("Edit", "SocieteMvc", new { id = societe.Id })">&#128394;</a></td>-->
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">Aucune société disponible</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function resetFilters() {
+        window.location.href = '@Url.Action("Index", "SocieteMvc")';
+    }
+</script>
+
+<style>
+    .societe-container {
+        width: 100%;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .breadcrumb {
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        align-items: center;
+    }
+
+    .breadcrumb a {
+        color: #004080;
+        text-decoration: none;
+        margin-right: 5px;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb span {
+        color: #666;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .new-societe-button {
+        padding: 10px 20px;
+        background-color: white;
+        color: black;
+        border: 1px solid #e9e1e1;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 300;
+    }
+
+    .new-societe-button:hover {
+        background-color: #f0f0f0;
+    }
+
+    .filters {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .input-container {
+        position: relative;
+        width: 250px;
+    }
+
+    .input-container input[type="text"] {
+        width: 100%;
+        padding: 10px 35px 10px 10px;
+        border: 1px solid #004080;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333;
+        box-sizing: border-box;
+    }
+
+    .input-container input[type="text"]::placeholder {
+        color: #666;
+    }
+
+    .search-button {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: #004080;
+        font-size: 16px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-button::before {
+        content: '\1F50D';
+        font-size: 16px;
+        color: #004080;
+    }
+
+    .reset-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reset-button svg {
+        width: 24px;
+        height: 24px;
+        stroke: #004080;
+    }
+
+    .table-container {
+        max-height: 100vh;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    table.societe-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+    thead th {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    tbody tr {
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    tbody td {
+        padding: 15px;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 14px;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tbody td:first-child {
+        border-left: 1px solid #ddd;
+        border-radius: 8px 0 0 8px;
+    }
+
+    tbody td:last-child {
+        border-right: 1px solid #ddd;
+        border-radius: 0 8px 8px 0;
+    }
+
+    tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+    }
+</style>

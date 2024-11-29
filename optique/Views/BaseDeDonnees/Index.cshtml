@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Base de Données";
+}
+
+<div class="container">
+    <!-- Menu Section -->
+    <div class="menu-section">
+        <a href="@Url.Action("Index", "ArticleMvc")" class="menu-link">
+            <div class="menu-item">
+                <img src="@Url.Content("~/images/product-svgrepo-com.svg")" alt="Article" />
+                <span>Article</span>
+            </div>
+        </a>
+        <a href="@Url.Action("Index", "FournisseurMvc")" class="menu-link">
+            <div class="menu-item">
+                <img src="@Url.Content("~/images/marche.png")" alt="Fournisseur" />
+                <span>Fournisseur</span>
+            </div>
+        </a>
+        <a href="@Url.Action("Index", "SocieteMvc")" class="menu-link">
+            <div class="menu-item">
+                <img src="@Url.Content("~/images/societe.png")" alt="Société" />
+                <span>Société</span>
+            </div>
+        </a>
+        <a href="@Url.Action("Index", "ClientMvc")" class="menu-link">
+            <div class="menu-item">
+                <img src="@Url.Content("~/images/client.png")" alt="Client" />
+                <span>Client</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+<style>
+    .container {
+        display: flex;
+        justify-content: center; /* Centre horizontalement */
+        align-items: center; /* Centre verticalement */
+        height: 100vh; /* Prend toute la hauteur de la vue */
+        padding: 20px;
+        box-sizing: border-box; /* Inclut le padding dans la hauteur totale */
+    }
+
+    .menu-section {
+        display: flex; /* Utiliser flexbox pour aligner les éléments sur une ligne */
+        justify-content: center; /* Centre les éléments horizontalement */
+        width: 100%; /* Prend toute la largeur disponible */
+        max-width: 1200px; /* Limite la largeur totale */
+        flex-wrap: wrap; /* Permet d'adapter les éléments en cas de dépassement */
+    }
+
+    .menu-link {
+        text-decoration: none;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        transition: transform 0.2s, box-shadow 0.2s; /* Ajout d'une transition pour l'effet au survol */
+        background-color: #f9f9f9; /* Couleur de fond */
+        width: 150px; /* Largeur fixe pour les éléments */
+        margin: 5px; /* Marge de 5px entre les éléments */
+    }
+
+    .menu-link:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-item img {
+        max-width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .menu-item span {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+</style>

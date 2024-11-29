@@ -1,0 +1,417 @@
+@model optique.ViewModels.CalendarViewModel
+@{
+    ViewData["Title"] = "Calendrier";
+    int currentMonth = ViewBag.CurrentMonth ?? DateTime.Now.Month;
+    int currentYear = ViewBag.CurrentYear ?? DateTime.Now.Year;
+    string currentView = ViewBag.CurrentView ?? "month";
+
+    if (currentMonth < 1 || currentMonth > 12) {
+        currentMonth = DateTime.Now.Month;
+    }
+    if (currentYear < 1) {
+        currentYear = DateTime.Now.Year;
+    }
+
+    var firstDayOfMonth = new DateTime(currentYear, currentMonth, 1);
+    var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+    var startingDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
+}
+
+<div class="header">
+            <div class="breadcrumb">
+                <a href="@Url.Action("Index", "Acceuil")" class="breadcrumb-link">
+                    <i class="fas fa-home"></i> Accueil
+                </a> 
+                <span class="breadcrumb-separator">&gt;</span>
+                <a href="@Url.Action("Index", "VenteMvc")" class="breadcrumb-link">
+                    <i class="fas fa-shopping-cart"></i> Vente
+                </a> 
+                <span class="breadcrumb-separator">&gt;</span>
+                <span>Calendrier</span>
+            </div>
+        </div>
+
+<!-- Affichage du calendrier -->
+<div id="calendarView" class="calendar-container" style="margin-top: 50px;">
+    <div class="calendar-header">
+        <div class="calendar-navigation">
+            <button class="prev-month" onclick="navigateCalendar(-1)">&lt;</button>
+            <span class="current-month">@Html.Raw(new DateTime(currentYear, currentMonth, 1).ToString("MMMM yyyy"))</span>
+            <button class="next-month" onclick="navigateCalendar(1)">&gt;</button>
+            <button class="toggle-view" onclick="changeView('@(currentView == "month" ? "week" : "month")')">Afficher par @(currentView == "month" ? "Semaine" : "Mois")</button>
+        </div>
+    </div>
+    <div class="calendar-body">
+        <div class="calendar-days">
+            <div>dim</div>
+            <div>lun</div>
+            <div>mar</div>
+            <div>mer</div>
+            <div>jeu</div>
+            <div>ven</div>
+            <div>sam</div>
+        </div>
+        <div class="calendar-dates">
+            @if (currentView == "month")
+            {
+                for (int i = 0; i < startingDayOfWeek; i++)
+                {
+                    <div class="calendar-date empty"></div>
+                }
+
+                for (int day = 1; day <= daysInMonth; day++)
+                {
+                    var date = new DateTime(currentYear, currentMonth, day);
+                    
+                    // Chèques et LCNs pour le jour
+                    var clientChequesForDay = Model.ClientCheques.Where(c => c.DateEcheance.HasValue && c.DateEcheance.Value.Date == date.Date);
+                    var fournisseurChequesForDay = Model.FournisseurCheques.Where(c => c.DateEcheance.HasValue && c.DateEcheance.Value.Date == date.Date);
+
+                    var clientLCNsForDay = Model.ClientLCNs.Where(l => l.DateEcheance.HasValue && l.DateEcheance.Value.Date == date.Date);
+                    var fournisseurLCNsForDay = Model.FournisseurLCNs.Where(l => l.DateEcheance.HasValue && l.DateEcheance.Value.Date == date.Date);
+
+                    <div class="calendar-date @(clientChequesForDay.Any() || fournisseurChequesForDay.Any() || clientLCNsForDay.Any() || fournisseurLCNsForDay.Any() ? "has-cheque" : "") @(date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday ? "weekend" : "")">
+                        <span class="date-number">@day</span>
+
+                        <!-- Chèques clients -->
+                        @if (clientChequesForDay.Any())
+                        {
+                            var numberOfClientCheques = clientChequesForDay.Count();
+                            var totalClientAmount = clientChequesForDay.Sum(c => c.Amount);
+                            <a href="javascript:void(0)" class="client-cheques" onclick="showChequesDetails('@date.ToString("yyyy-MM-dd")', 'client')">
+                                <p>Cheques(@numberOfClientCheques) / (@totalClientAmount €)</p>
+                            </a>
+                        }
+
+                        <!-- LCN clients -->
+                        @if (clientLCNsForDay.Any())
+                        {
+                            var numberOfClientLCNs = clientLCNsForDay.Count();
+                            var totalClientLCNAmount = clientLCNsForDay.Sum(l => l.Amount);
+                            <a href="javascript:void(0)" class="client-lcns" onclick="showLCNsDetails('@date.ToString("yyyy-MM-dd")', 'client')">
+                                <p>LCN (@numberOfClientLCNs) / (@totalClientLCNAmount €)</p>
+                            </a>
+                        }
+
+                        <!-- Chèques fournisseurs -->
+                        @if (fournisseurChequesForDay.Any())
+                        {
+                            var numberOfFournisseurCheques = fournisseurChequesForDay.Count();
+                            var totalFournisseurAmount = fournisseurChequesForDay.Sum(c => c.Amount);
+                            <a href="javascript:void(0)" class="fournisseur-cheques" onclick="showChequesDetails('@date.ToString("yyyy-MM-dd")', 'fournisseur')">
+                                <p>Cheques (@numberOfFournisseurCheques) / (@totalFournisseurAmount €)</p>
+                            </a>
+                        }
+
+                        <!-- LCN fournisseurs -->
+                        @if (fournisseurLCNsForDay.Any())
+                        {
+                            var numberOfFournisseurLCNs = fournisseurLCNsForDay.Count();
+                            var totalFournisseurLCNAmount = fournisseurLCNsForDay.Sum(l => l.Amount);
+                            <a href="javascript:void(0)" class="fournisseur-lcns" onclick="showLCNsDetails('@date.ToString("yyyy-MM-dd")', 'fournisseur')">
+                                <p>LCN (@numberOfFournisseurLCNs) / (@totalFournisseurLCNAmount €)</p>
+                            </a>
+                        }
+
+                        @if (!clientChequesForDay.Any() && !fournisseurChequesForDay.Any() && !clientLCNsForDay.Any() && !fournisseurLCNsForDay.Any())
+                        {
+                            <p>Aucun Cheque/LCN</p>
+                        }
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+<!-- Div pour afficher les détails des chèques -->
+<div id="chequesDetailsView" style="display: none;">
+    <button class="btn btn-secondary" onclick="returnToCalendar()">Retour au calendrier</button>
+    <div id="chequesDetailsContent"></div>
+</div>
+
+
+
+<script>
+    function showLCNsDetails(date, type) {
+        fetch(`/VenteMvc/GetLCNsByDate?date=${date}&type=${type}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('chequesDetailsContent').innerHTML = data;
+                document.getElementById('calendarView').style.display = 'none';
+                document.getElementById('chequesDetailsView').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des LCN:', error);
+            });
+    }
+
+    function showChequesDetails(date, type) {
+        fetch(`/VenteMvc/GetChequesByDate?date=${date}&type=${type}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('chequesDetailsContent').innerHTML = data;
+                document.getElementById('calendarView').style.display = 'none';
+                document.getElementById('chequesDetailsView').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des chèques:', error);
+            });
+    }
+
+    function returnToCalendar() {
+        document.getElementById('chequesDetailsView').style.display = 'none';
+        document.getElementById('calendarView').style.display = 'block';
+    }
+
+    function navigateCalendar(offset) {
+        let currentMonth = @ViewBag.CurrentMonth;
+        let currentYear = @ViewBag.CurrentYear;
+        let currentView = "@ViewBag.CurrentView";
+
+        currentMonth += offset;
+        if (currentMonth < 1) {
+            currentMonth = 12;
+            currentYear -= 1;
+        } else if (currentMonth > 12) {
+            currentMonth = 1;
+            currentYear += 1;
+        }
+
+        window.location.href = `/VenteMvc/Calendar?month=${currentMonth}&year=${currentYear}&view=${currentView}`;
+    }
+
+    function changeView(view) {
+        let currentView = "@ViewBag.CurrentView";
+        let currentMonth = @ViewBag.CurrentMonth;
+        let currentYear = @ViewBag.CurrentYear;
+        
+        if (currentView !== view) {
+            window.location.href = `/VenteMvc/Calendar?month=${currentMonth}&year=${currentYear}&view=${view}`;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.prev-month, .next-month, .toggle-view').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const direction = btn.classList.contains('prev-month') ? -1 : 1;
+                navigateCalendar(direction);
+            });
+        });
+
+        document.querySelector('.toggle-view').addEventListener('click', function() {
+            changeView(currentView === 'month' ? 'week' : 'month');
+        });
+    });
+</script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+<style>
+
+
+
+
+    .breadcrumb {
+        font-size: 18px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .breadcrumb-link {
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        transition: color 0.3s ease;
+    }
+
+    .breadcrumb-link i {
+        margin-right: 5px;
+    }
+
+    .breadcrumb-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    .breadcrumb-separator {
+        color: #666;
+        margin: 0 5px;
+    }.header {
+      margin-bottom: 20px;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+
+.date-container {
+  position: relative;
+  display: inline-block;
+  border: 2px solid #003399; /* La couleur de la bordure */
+  border-radius: 4px;
+}
+
+.date-input {
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.icon-calendar {
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  transform: translateY(-40%);
+  color: rgb(30, 71, 221);
+  background-color: #f1f2f5ed;
+  padding: 0px;
+  border-radius: 4px;
+}
+
+.icon-calendar i {
+  font-size: 18px;
+}
+
+
+
+
+
+
+/* Style pour les chèques clients */
+.client-cheques {
+    background-color: #e6f4ea; /* Vert pâle pour clients */
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+}
+
+/* Style pour les LCN clients */
+.client-lcns {
+    background-color: #e6f4ea; /* Vert pâle pour LCN clients */
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+}
+
+/* Style pour les chèques fournisseurs */
+.fournisseur-cheques {
+    background-color: #f8d7da; /* Rouge pâle pour fournisseurs */
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+}
+
+/* Style pour les LCN fournisseurs */
+.fournisseur-lcns {
+    background-color: #f8d7da; /* Rouge pâle pour LCN fournisseurs */
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+}
+
+/* Style de la vue calendrier */
+.calendar-container {
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: #f6b740;
+    color: #fff;
+}
+
+.calendar-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar-navigation button {
+    background-color: transparent;
+    border: none;
+    font-size: 1em;
+    color: #fff;
+    cursor: pointer;
+}
+
+.toggle-view {
+    background-color: #fff;
+    color: #e6f026;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 8px;
+    border: none;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    background-color: #f6b740;
+    color: #fff;
+    padding: 6px 0;
+    font-weight: bold;
+}
+
+.calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: minmax(80px, auto);
+    border-top: 1px solid #ddd;
+}
+
+.calendar-date {
+    border: 1px solid #ddd;
+    padding: 5px;
+    position: relative;
+    text-align: center;
+    font-size: 0.8em;
+    color: #333;
+    height: 100px;
+    overflow-y: auto;
+}
+
+.calendar-date.empty {
+    background-color: #f9f9f9;
+}
+
+.calendar-date.has-cheque {
+    background-color: #e0f7fa;
+}
+
+.calendar-date.weekend {
+    background-color: #f0f0f0;
+}
+
+
+</style>

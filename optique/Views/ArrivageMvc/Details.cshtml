@@ -1,0 +1,276 @@
+<div class="container-fluid">
+    <div class="breadcrumb">
+        <a href="@Url.Action("Index", "Acceuil")" class="breadcrumb-link">Accueil</a> &gt;
+        <span class="breadcrumb-current">Arrivages</span> &gt;
+        <span class="breadcrumb-current">Détail d'Arrivage</span>
+    </div>
+    
+    <div class="row d-flex">
+        <!-- Colonne gauche : Détails des paiements et formulaire d'ajout -->
+        <div class="flex-column" style="flex: 1; margin-right: 10px;">
+            <h4 class="mt-4" style="margin-top: 100px; text-align: center;">Details De Paiement</h4>
+            <div class="table-responsive">
+                <table class="table table-striped mt-3">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Type de paiement</th>
+                            <th>N° Chèque</th>
+                            <th>N° LCN</th>
+                            <th>Montant</th>
+                            <th>Date d'échéance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var paiement in Model.DetailsPaiements)
+                        {
+                            <tr>
+                                <td>@paiement.TypeDePaiementLibelle</td>
+                                <td>@paiement.NCheque</td>
+                                <td>@paiement.NLCN</td>
+                                <td>@paiement.Montant.ToString("C")</td>
+                                <td>@paiement.DateEcheance?.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Formulaire pour ajouter un nouveau détail de paiement -->
+            <form asp-action="AjouterPaiement" asp-controller="ArrivageMvc" method="post" id="ajouterPaiementForm">
+                <input type="hidden" name="arrivageId" value="@Model.Arrivage.Id" />
+               <!-- <h4 style="text-align: center;">Ajouter un Paiement</h4>-->
+                <div id="detailsPaiementSection">
+                    <div class="table-responsive">
+                        <table class="table table-bordered mt-2">
+                            
+                            <tbody id="detailsPaiementsContainer">
+                                <tr data-index="0">
+                                    <td>
+                                        <select name="paiementDto.TypeDePaiementId" class="form-control" required>
+                                            <option value="">Sélectionnez un type</option>
+                                            @foreach (var type in ViewBag.TypesDePaiement)
+                                            {
+                                                <option value="@type.Value">@type.Text</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td><input type="text" name="paiementDto.NCheque" class="form-control " /></td>
+                                    <td><input type="text" name="paiementDto.NLCN" class="form-control" /></td>
+                                    <td><input type="number" name="paiementDto.Montant" class="form-control paiement-montant" required /></td>
+                                    <td><input type="date" name="paiementDto.DateEcheance" class="form-control" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+
+            @if (Model.IsValiderVisible)
+            {
+                <!-- Formulaire pour valider l'arrivage -->
+                <form asp-action="Valider" asp-controller="ArrivageMvc" method="post" id="validerForm">
+                    <input type="hidden" name="arrivageId" value="@Model.Arrivage.Id" />
+                </form>
+            }
+
+            <!-- Conteneur pour les boutons avec flexbox -->
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+                <!-- Bouton Enregistrer -->
+                <button type="submit" class="btn btn-primary" form="ajouterPaiementForm" id="enregistrerBtn">Enregistrer</button>
+
+                @if (Model.IsValiderVisible)
+                {
+                    <!-- Bouton Valider -->
+                    <button type="submit" class="btn btn-success" form="validerForm">Valider</button>
+                }
+            </div>
+        </div>
+
+        <!-- Colonne droite : Détails de l'arrivage -->
+        <div class="flex-column" style="flex: 1; margin-left: 45px; margin-top: 60px;">
+            <div class="arrivage-details card p-4 shadow-sm">
+                <h3>Détails de l'Arrivage</h3>
+                <p><strong>Fournisseur :</strong> @Model.FournisseurNom</p>
+                <p><strong>Société :</strong> @Model.SocieteNom</p>
+                <p><strong>Date d'arrivage :</strong> @Model.Arrivage.DateArrivage.ToString("dd/MM/yyyy")</p>
+                <p><strong>Numéro de Bon de Livraison :</strong> @Model.Arrivage.NumBL</p>
+                <p><strong>Numéro de Facture :</strong> @Model.Arrivage.NumFacture</p>
+               <!-- <p><strong>Montant Facture :</strong> @Model.Arrivage.MontantFacture.ToString("C")</p>-->
+                <p><strong>Montant Facture :</strong> <span id="montantFacture">@Model.Arrivage.MontantFacture</span></p>
+
+                <p><strong>Statut :</strong> @Model.StatutDistributionLibelle</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+
+        console.log("Le script est chargé correctement.");
+    // Récupérer le montant de la facture
+    const montantFactureElement = document.getElementById('montantFacture');
+    const montantFacture = parseFloat(montantFactureElement.textContent.trim().replace(/[^0-9,.]+/g, '').replace(',', '.'));
+
+    // Si le montant de la facture est invalide, afficher une erreur dans la console
+    if (isNaN(montantFacture)) {
+        console.error("Le montant de la facture n'a pas pu être converti correctement. Valeur reçue: ", montantFactureElement.textContent);
+        return;
+    }
+
+    // Bouton Enregistrer et champs de montant des paiements
+    const enregistrerBtn = document.getElementById('enregistrerBtn');
+    const montantInputs = document.querySelectorAll('.paiement-montant');
+
+    // Fonction pour vérifier le total des paiements
+    function checkTotalPaiement() {
+        let totalPaiement = 0;
+
+        // Additionner les valeurs des montants saisis
+        montantInputs.forEach(function (input) {
+            const montant = parseFloat(input.value.replace(',', '.')); // Remplacer les virgules par des points
+            if (!isNaN(montant)) {
+                totalPaiement += montant;
+            }
+        });
+
+        console.log("Total des paiements calculé:", totalPaiement);
+        console.log("Montant de la facture:", montantFacture);
+
+        // Comparer le total des paiements avec le montant de la facture
+        if (totalPaiement > montantFacture) {
+            enregistrerBtn.disabled = true; // Désactiver le bouton si le total dépasse le montant de la facture
+            console.log("Bouton désactivé. Total des paiements dépasse le montant de la facture.");
+        } else {
+            enregistrerBtn.disabled = false; // Activer sinon
+            console.log("Bouton activé. Total des paiements est inférieur ou égal à la facture.");
+        }
+    }
+
+    // Ajouter un écouteur d'événement sur chaque champ de montant pour vérifier les montants à chaque changement
+    montantInputs.forEach(function (input) {
+        input.addEventListener('input', checkTotalPaiement);
+    });
+
+    // Vérification initiale lors du chargement de la page
+    checkTotalPaiement();
+});
+
+
+    </script>
+
+
+
+<!-- Styles -->
+<style>
+
+.breadcrumb-link {
+    text-decoration: none; /* Enlève la ligne sous le lien */
+    font-size: 20px; /* Agrandit le texte (vous pouvez ajuster la taille selon votre besoin) */
+    color: inherit; /* Conserve la couleur actuelle du lien */
+}
+
+.breadcrumb-link:hover {
+    text-decoration: underline; /* Optionnel : si vous souhaitez ajouter un soulignement au survol */
+}
+
+.container-fluid {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.arrivage-details {
+    background-color: #898df5;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    height: 500px;
+    color: black;
+    font-size: 20px;
+    width: 70%;
+    margin-left: 30px;
+    text-align: center;
+}
+
+h3, h4 {
+    color: #343a40;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-left: 30px;
+}
+
+.table th {
+    background-color: #d8dcdf;
+    color: rgb(43, 42, 42);
+    padding: 10px;
+}
+
+.table td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    font-size: 20px;
+    padding: 10px 30px;
+    border: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: inline-block;
+    background-color: #230cf4;
+    color: white;
+    width: 150px;
+    border-radius: 5px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    cursor: pointer;
+}
+
+.btn-success {
+    font-size: 20px;
+    padding: 10px 30px;
+    border: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: inline-block;
+    background-color: #230cf4;
+    color: white;
+    width: 150px;
+    border-radius: 5px;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.form-control {
+    height: 40px;
+    cursor: pointer;
+    border: 1px solid #230cf4;
+    border-radius: 7px;
+}
+</style>
